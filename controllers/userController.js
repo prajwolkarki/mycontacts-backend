@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-
+const jwt = require('jsonwebtoken');
 //@desc Register a user
 //@route POST /api/users/register
 //@access public
@@ -44,6 +44,12 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route POST /api/users/current
 //@access private
 const currentUser = asyncHandler(async (req, res) => {
+  const {email,password}= req.body;
+  if(!email || !password){
+    res.status(400);
+    throw new Error("All fields are mandatory");
+  }
+  const user = await User.findOne({email});
   res.json({ message: "Current user Information" });
 });
 
